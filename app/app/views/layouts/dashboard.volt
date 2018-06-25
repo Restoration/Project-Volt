@@ -9,9 +9,21 @@
   {% include 'parts/dashboard_css.volt' %}
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
 
-{{ content() }}
+    {% include 'parts/main_header.volt' %}
 
+    <!-- Left side column. contains the logo and sidebar -->
+    {% include 'parts/main_sidebar.volt' %}
+
+    {{ content() }}
+
+    {% include 'parts/main_footer.volt' %}
+
+    {% include 'parts/control_sidebar.volt' %}
+
+</div>
+<!-- ./wrapper -->
 {% include 'parts/dashboard_js.volt' %}
 </body>
 </html>
