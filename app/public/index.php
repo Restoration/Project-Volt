@@ -3,11 +3,14 @@ use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
+//define('CACHE_PATH', BASE_PATH . '/cache');
 // Register an autoloader
 $loader = new Loader();
 $loader->registerDirs(
@@ -26,13 +29,24 @@ $di->set(
         $view = new View();
         $view->setViewsDir(APP_PATH . '/views/');
         $view->registerEngines(
-            array(
-                ".volt" => 'Phalcon\Mvc\View\Engine\Volt'
-            )
+            [
+                '.volt' => function ($view, $di) {
+                    $volt = new Volt($view, $di);
+                    $volt->setOptions(array(
+                      'compiledPath' => BASE_PATH . '/cache/',
+                      'stat' => true,
+                      'compileAlways' => true
+                    ));
+                    return $volt;
+                },
+                '.phtml' => PhpEngine::class
+            ]
         );
         return $view;
     }
 );
+
+
 // Setup a base URI so that all generated URIs include the "tutorial" folder
 $di->set(
     'url',
