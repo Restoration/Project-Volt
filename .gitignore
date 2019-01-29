@@ -1,2 +1,2 @@
 # Do not raise the cache folder to staging
-cache/
+app/cache/
